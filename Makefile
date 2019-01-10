@@ -46,7 +46,7 @@ CONFIG_HEADER = config.h
 ERRNO_HEADER = abi/include/abi/errno.h
 ERRNO_INPUT = abi/include/abi/errno.in
 
-.PHONY: all precheck cscope cscope_parts autotool config_auto config_default config distclean clean check releasefile release common boot kernel uspace export-posix space help
+.PHONY: all precheck cscope cscope_parts autotool config-random config_default config distclean clean check releasefile release common boot kernel uspace export-posix space help
 
 all: kernel uspace export-cross test-xcw
 	$(MAKE) -r -C boot PRECHECK=$(PRECHECK)
@@ -63,7 +63,7 @@ help:
 	@echo "    initializing the config files for a specific architecture"
 	@echo "  config_default PROFILE=<architecture>"
 	@echo "    Configures the build-system with default values for a specific architecture"
-	@echo "  random-config"
+	@echo "  config-random"
 	@echo "    Configures the build-system randomly. Only used for testing purpose"
 
 	@echo "Building"
@@ -182,7 +182,7 @@ endif
 config: $(CONFIG_RULES)
 	$(CONFIG) $<
 
-random-config: $(CONFIG_RULES)
+config-random: $(CONFIG_RULES)
 	$(CONFIG) $< random
 
 # Release files

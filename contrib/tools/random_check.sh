@@ -103,7 +103,7 @@ while [ $COUNTER -lt $LOOPS ]; do
 				exit 2
 			fi
 
-			make random-config 2>&1 || exit 1
+			make config-random 2>&1 || exit 1
 
 			tr -d ' ' <Makefile.config >"${FILENAME_PREFIX}config.trimmed"
 
