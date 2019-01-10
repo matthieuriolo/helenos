@@ -46,10 +46,58 @@ CONFIG_HEADER = config.h
 ERRNO_HEADER = abi/include/abi/errno.h
 ERRNO_INPUT = abi/include/abi/errno.in
 
-.PHONY: all precheck cscope cscope_parts autotool config_auto config_default config distclean clean check releasefile release common boot kernel uspace export-posix space
+.PHONY: all precheck cscope cscope_parts autotool config_auto config_default config distclean clean check releasefile release common boot kernel uspace export-posix space help
 
 all: kernel uspace export-cross test-xcw
 	$(MAKE) -r -C boot PRECHECK=$(PRECHECK)
+
+help:
+	@echo "Usage of HelenOS build system"
+	@echo "------------------------------"
+	@echo "The following targets are available:"
+
+	@echo "Configuring"
+	@echo "  config"
+	@echo "    Displays a text interface for configuring the build-system."
+	@echo "    It is recommended to call at first config_default for "
+	@echo "    initializing the config files for a specific architecture"
+	@echo "  config_default PROFILE=<architecture>"
+	@echo "    Configures the build-system with default values for a specific architecture"
+	@echo "  random-config"
+	@echo "    Configures the build-system randomly. Only used for testing purpose"
+
+	@echo "Building"
+	@echo "  all [PROFILE=<architecture>]"
+	@echo "    Builds HelenOS and is the default target"
+	@echo "  kernel [PROFILE=<architecture>]"
+	@echo "    Builds only the kernel"
+	@echo "  uspace [PROFILE=<architecture>]"
+	@echo "    Builds only the user space"
+	@echo "  doxy"
+	@echo "    Creates the doxygen documentation"
+
+	@echo "Managing code"
+	@echo "  clean"
+	@echo "    Deletes all compiled or built files"
+	@echo "  distclean"
+	@echo "    Same as 'clean' but deletes cached files of the build-system too"
+	@echo "  check"
+	@echo "    Performs a rudimentary build test for every architecture"
+	@echo "  ccheck"
+	@echo "    Performs a syntax test on C files. This target should"
+	@echo "    always be executed before publishing code to the repository"
+	@echo "  ccheck-fix"
+	@echo "    Same as the target ccheck but performs automatically some"
+	@echo "    correction on the code for known syntax failures"
+	@echo "  space"
+	@echo "    Removes white spaces at the end of a line"
+	@echo "Distribution"
+	@echo "  release"
+	@echo "    Builds all architectures for realeses"
+	@echo "  releasefile [PROFILE=<architecture>]"
+	@echo "    Copies the build into the release folder"
+	@echo "  export-cross"
+	@echo "    Exports the posix library and headers to uspace/export"
 
 common: $(COMMON_MAKEFILE) $(COMMON_HEADER) $(CONFIG_MAKEFILE) $(CONFIG_HEADER) $(ERRNO_HEADER)
 
