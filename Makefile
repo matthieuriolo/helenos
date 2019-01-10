@@ -46,11 +46,11 @@ CONFIG_HEADER = config.h
 ERRNO_HEADER = abi/include/abi/errno.h
 ERRNO_INPUT = abi/include/abi/errno.in
 
-.PHONY: all precheck cscope cscope-parts autotool config-random config-default config distclean clean check releasefile release common boot kernel uspace export-posix space help check-errno
-
+.PHONY: all
 all: kernel uspace export-cross test-xcw
 	$(MAKE) -r -C boot PRECHECK=$(PRECHECK)
 
+.PHONY: help
 help:
 	@echo "Usage of HelenOS build system"
 	@echo "------------------------------"
@@ -99,17 +99,22 @@ help:
 	@echo "  export-cross"
 	@echo "    Exports the posix library and headers to uspace/export"
 
+.PHONY: common
 common: $(COMMON_MAKEFILE) $(COMMON_HEADER) $(CONFIG_MAKEFILE) $(CONFIG_HEADER) $(ERRNO_HEADER)
 
+.PHONY: kernel
 kernel: common
 	$(MAKE) -r -C kernel PRECHECK=$(PRECHECK)
 
+.PHONY: uspace
 uspace: common
 	$(MAKE) -r -C uspace PRECHECK=$(PRECHECK)
 
+.PHONY: test-xcw
 test-xcw: uspace export-cross
 	export PATH=$$PATH:$(abspath tools/xcw/bin) && $(MAKE) -r -C tools/xcw/demo
 
+.PHONY: export-posix
 export-posix: common
 ifndef EXPORT_DIR
 	@echo ERROR: Variable EXPORT_DIR is not defined. && false
@@ -117,32 +122,40 @@ else
 	$(MAKE) -r -C uspace export EXPORT_DIR=$(abspath $(EXPORT_DIR))
 endif
 
+.PHONY: export-cross
 export-cross: common
 	$(MAKE) -r -C uspace export EXPORT_DIR=$(abspath uspace/export)
 
+.PHONY: precheck
 precheck: clean
 	$(MAKE) -r all PRECHECK=y
 
+.PHONY: cscope
 cscope:
 	find abi kernel boot uspace -type f -regex '^.*\.[chsS]$$' | xargs $(CSCOPE) -b -k -u -f$(CSCOPE).out
 
+.PHONY: cscope-parts
 cscope-parts:
 	find abi -type f -regex '^.*\.[chsS]$$' | xargs $(CSCOPE) -b -k -u -f$(CSCOPE)_abi.out
 	find kernel -type f -regex '^.*\.[chsS]$$' | xargs $(CSCOPE) -b -k -u -f$(CSCOPE)_kernel.out
 	find boot -type f -regex '^.*\.[chsS]$$' | xargs $(CSCOPE) -b -k -u -f$(CSCOPE)_boot.out
 	find uspace -type f -regex '^.*\.[chsS]$$' | xargs $(CSCOPE) -b -k -u -f$(CSCOPE)_uspace.out
 
+.PHONY: format
 format:
 	find abi kernel boot uspace -type f -regex '^.*\.[ch]$$' | xargs $(FORMAT) -i -sort-includes -style=file
 
+.PHONY: ccheck
 ccheck:
 	cd tools && ./build-ccheck.sh
 	tools/ccheck.sh
 
+.PHONY: ccheck-fix
 ccheck-fix:
 	cd tools && ./build-ccheck.sh
 	tools/ccheck.sh --fix
 
+.PHONY: space
 space:
 	tools/srepl '[ \t]\+$$' ''
 
@@ -150,6 +163,7 @@ doxy:
 	$(MAKE) -r -C doxygen
 
 # Pre-integration build check
+.PHONY: check
 check: ccheck $(CHECK)
 ifdef JOBS
 	$(CHECK) -j $(JOBS)
@@ -159,19 +173,20 @@ endif
 
 # `sed` pulls a list of "compatibility-only" error codes from `errno.in`,
 # the following grep finds instances of those error codes in HelenOS code.
+.PHONY: check-errno
 check-errno:
 	@ ! cat abi/include/abi/errno.in | \
 	sed -n -e '1,/COMPAT_START/d' -e 's/__errno_entry(\([A-Z0-9]\+\).*/\\b\1\\b/p' | \
 	git grep -n -f - -- ':(exclude)abi' ':(exclude)uspace/lib/posix'
 
 # Autotool (detects compiler features)
-
+.PHONY: autotool
 autotool $(COMMON_MAKEFILE) $(COMMON_HEADER): $(CONFIG_MAKEFILE) $(AUTOTOOL)
 	$(AUTOTOOL)
 	diff -q $(COMMON_HEADER).new $(COMMON_HEADER) 2> /dev/null; if [ $$? -ne 0 ]; then mv -f $(COMMON_HEADER).new $(COMMON_HEADER); fi
 
 # Build-time configuration
-
+.PHONY: config-default
 config-default $(CONFIG_MAKEFILE) $(CONFIG_HEADER): $(CONFIG_RULES)
 ifeq ($(HANDS_OFF),y)
 	$(CONFIG) $< hands-off $(PROFILE)
@@ -179,25 +194,29 @@ else
 	$(CONFIG) $< default $(PROFILE)
 endif
 
+.PHONY: config
 config: $(CONFIG_RULES)
 	$(CONFIG) $<
 
+.PHONY: config-random
 config-random: $(CONFIG_RULES)
 	$(CONFIG) $< random
 
 # Release files
-
+.PHONY: releasefile
 releasefile: all
 	$(MAKE) -r -C release releasefile
 
+.PHONY: release
 release:
 	$(MAKE) -r -C release release
 
 # Cleaning
-
+.PHONY: distclean
 distclean: clean
 	rm -f $(CSCOPE).out $(COMMON_MAKEFILE) $(COMMON_HEADER) $(CONFIG_MAKEFILE) $(CONFIG_HEADER) tools/*.pyc tools/checkers/*.pyc release/HelenOS-*
 
+.PHONY: clean
 clean:
 	rm -fr $(SANDBOX)
 	$(MAKE) -r -C kernel clean
