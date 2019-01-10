@@ -12,11 +12,9 @@
 *.so.*
 /Makefile.common
 /Makefile.config
-/PKG
 /common.h
 /config.h
 /cscope.out
-/downloads
 /hdisk.img
 /image.boot
 /image.iso
@@ -73,6 +71,7 @@ tools/ia64-pc-linux-gnu
 tools/mips-linux-gnu
 tools/mips64el-linux-gnu
 tools/mipsel-linux-gnu
+tools/PKG
 tools/ppc-linux-gnu
 tools/ppc64-linux-gnu
 tools/riscv64-unknown-linux-gnu
