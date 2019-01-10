@@ -46,7 +46,7 @@ CONFIG_HEADER = config.h
 ERRNO_HEADER = abi/include/abi/errno.h
 ERRNO_INPUT = abi/include/abi/errno.in
 
-.PHONY: all precheck cscope cscope_parts autotool config-random config_default config distclean clean check releasefile release common boot kernel uspace export-posix space help
+.PHONY: all precheck cscope cscope-parts autotool config-random config-default config distclean clean check releasefile release common boot kernel uspace export-posix space help check-errno
 
 all: kernel uspace export-cross test-xcw
 	$(MAKE) -r -C boot PRECHECK=$(PRECHECK)
@@ -59,9 +59,9 @@ help:
 	@echo "Configuring"
 	@echo "  config"
 	@echo "    Displays a text interface for configuring the build-system."
-	@echo "    It is recommended to call at first config_default for "
+	@echo "    It is recommended to call at first config-default for "
 	@echo "    initializing the config files for a specific architecture"
-	@echo "  config_default PROFILE=<architecture>"
+	@echo "  config-default PROFILE=<architecture>"
 	@echo "    Configures the build-system with default values for a specific architecture"
 	@echo "  config-random"
 	@echo "    Configures the build-system randomly. Only used for testing purpose"
@@ -126,7 +126,7 @@ precheck: clean
 cscope:
 	find abi kernel boot uspace -type f -regex '^.*\.[chsS]$$' | xargs $(CSCOPE) -b -k -u -f$(CSCOPE).out
 
-cscope_parts:
+cscope-parts:
 	find abi -type f -regex '^.*\.[chsS]$$' | xargs $(CSCOPE) -b -k -u -f$(CSCOPE)_abi.out
 	find kernel -type f -regex '^.*\.[chsS]$$' | xargs $(CSCOPE) -b -k -u -f$(CSCOPE)_kernel.out
 	find boot -type f -regex '^.*\.[chsS]$$' | xargs $(CSCOPE) -b -k -u -f$(CSCOPE)_boot.out
@@ -159,7 +159,7 @@ endif
 
 # `sed` pulls a list of "compatibility-only" error codes from `errno.in`,
 # the following grep finds instances of those error codes in HelenOS code.
-check_errno:
+check-errno:
 	@ ! cat abi/include/abi/errno.in | \
 	sed -n -e '1,/COMPAT_START/d' -e 's/__errno_entry(\([A-Z0-9]\+\).*/\\b\1\\b/p' | \
 	git grep -n -f - -- ':(exclude)abi' ':(exclude)uspace/lib/posix'
@@ -172,7 +172,7 @@ autotool $(COMMON_MAKEFILE) $(COMMON_HEADER): $(CONFIG_MAKEFILE) $(AUTOTOOL)
 
 # Build-time configuration
 
-config_default $(CONFIG_MAKEFILE) $(CONFIG_HEADER): $(CONFIG_RULES)
+config-default $(CONFIG_MAKEFILE) $(CONFIG_HEADER): $(CONFIG_RULES)
 ifeq ($(HANDS_OFF),y)
 	$(CONFIG) $< hands-off $(PROFILE)
 else
