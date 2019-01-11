@@ -11,7 +11,7 @@ This directory contains a set of different tools for building or working with He
 
 Detect important prerequisites and parameters for building HelenOS
 
-## build-ccheck.sh [I]
+## ccheck-build.sh [I]
 
 Builds the newest version of ccheck tool
 

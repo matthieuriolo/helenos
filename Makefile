@@ -155,7 +155,7 @@ ccheck-fix: ccheck-build
 
 .PHONY: ccheck-build
 ccheck-build:
-	cd tools && ./build-ccheck.sh
+	cd tools && ./ccheck-build.sh
 
 .PHONY: space
 space:
