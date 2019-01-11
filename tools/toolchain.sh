@@ -52,6 +52,13 @@ SRCDIR="$(readlink -f $(dirname "$0"))"
 REAL_INSTALL=true
 USE_HELENOS_TARGET=true
 
+
+# set default CROSS_PREFIX path
+if [ -z "${CROSS_PREFIX}" ] ; then
+	CROSS_PREFIX="/usr/local/cross"
+fi
+
+
 check_error() {
 	if [ "$1" -ne "0" ] ; then
 		echo
@@ -111,11 +118,6 @@ test_version() {
 		PLATFORMS=("amd64" "arm32" "ia32" "ia64" "mips32" "mips32eb" "ppc32" "riscv64" "sparc64")
 	else
 		PLATFORMS=("$1")
-	fi
-	
-	
-	if [ -z "${CROSS_PREFIX}" ] ; then
-		CROSS_PREFIX="/usr/local/cross"
 	fi
 
 	for i in "${PLATFORMS[@]}"
@@ -253,6 +255,25 @@ check_dirs() {
 }
 
 prepare() {
+	# test if needed file permission are granted
+	if $REAL_INSTALL ; then
+		TEST_INSTALL_DIR="$CROSS_PREFIX"
+		while [ "$TEST_INSTALL_DIR" != "/" ]
+		do
+			if [ -d "$TEST_INSTALL_DIR" ] ; then
+				if [ ! -w "$TEST_INSTALL_DIR" ] ; then
+					echo "Missing directory permission for $TEST_INSTALL_DIR"
+					echo "You might need to run $0 with the user root"
+					exit 1
+				else
+					break
+				fi
+			fi
+			
+			TEST_INSTALL_DIR=$(dirname "$TEST_INSTALL_DIR")
+		done
+	fi
+
 	show_dependencies
 	show_countdown 10
 
@@ -326,10 +347,6 @@ build_target() {
 	BINUTILSDIR="${WORKDIR}/binutils-${BINUTILS_VERSION}"
 	GCCDIR="${WORKDIR}/gcc-${GCC_VERSION}"
 	GDBDIR="${WORKDIR}/gdb-${GDB_VERSION}"
-
-	if [ -z "${CROSS_PREFIX}" ] ; then
-		CROSS_PREFIX="/usr/local/cross"
-	fi
 
 	if [ -z "$JOBS" ] ; then
 		JOBS=`nproc`
