@@ -28,6 +28,12 @@
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+
+#
+# Builds the toolchain for a specific architecture
+#
+
+
 BINUTILS_GDB_GIT="https://github.com/HelenOS/binutils-gdb.git"
 
 BINUTILS_BRANCH="binutils-2_31_1-helenos"

@@ -27,6 +27,10 @@
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+#
+# Tests if the C syntax if formatted properly
+#
+
 ccheck=tools/sycek/ccheck
 if [ ."$CCHECK" != . ]; then
 	ccheck="$CCHECK"

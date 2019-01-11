@@ -27,6 +27,10 @@
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+#
+# Builds the newest version of ccheck tool
+#
+
 SYCEK_GIT="https://github.com/jxsvoboda/sycek"
 SYCEK_REV="42fe0d77819f0ec05f17e40ea54c7b62073c8e97"
 

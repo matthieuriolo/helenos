@@ -28,6 +28,11 @@
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+
+#
+# Collects and displays all copyright owners
+#
+
 cat << EOF
 In order to comply with the license terms of the distributed software, we would
 like to reproduce the following copyright notices, that were automatically
