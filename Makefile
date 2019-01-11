@@ -146,14 +146,16 @@ format:
 	find abi kernel boot uspace -type f -regex '^.*\.[ch]$$' | xargs $(FORMAT) -i -sort-includes -style=file
 
 .PHONY: ccheck
-ccheck:
-	cd tools && ./build-ccheck.sh
+ccheck: ccheck-build
 	tools/ccheck.sh
 
 .PHONY: ccheck-fix
-ccheck-fix:
-	cd tools && ./build-ccheck.sh
+ccheck-fix: ccheck-build
 	tools/ccheck.sh --fix
+
+.PHONY: ccheck-build
+ccheck-build:
+	cd tools && ./build-ccheck.sh
 
 .PHONY: space
 space:
