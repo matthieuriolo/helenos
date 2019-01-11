@@ -41,6 +41,10 @@ import subprocess
 import xtui
 import random
 
+if len(sys.argv) < 2:
+	print "Missing argument 1. Pass as first argument a ruleset file like HelenOS.config"
+	sys.exit(1)
+
 RULES_FILE = sys.argv[1]
 MAKEFILE = 'Makefile.config'
 MACROS = 'config.h'
