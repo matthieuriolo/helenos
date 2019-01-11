@@ -1,6 +1,6 @@
 # Tools
 
-This directory contains a set of different tools for building or working with HelenOS. Many of those tools should not be called directly but will invoked through the root Makefile. The tools which should not be used manually are marked with an [I]. Tools which must be called from the root directory are marked with [R]. Files which gets included by other tools and are not supposed to be executed at all are marked [A].
+This directory contains a set of different tools for building or working with HelenOS. Many of those tools should not be called directly but will invoked through the root Makefile. The tools which should not be used manually are marked with an **[I]**. Tools which must be called from the root directory are marked with **[R]**. Files which gets included by other tools and are not supposed to be executed at all are marked **[A]**.
 
 
 ## autocheck.awk [IR]
@@ -71,7 +71,7 @@ FAT creator
 
 Create legacy uImage (U-Boot image)
 
-## srepl
+## srepl [I]
 
 String replacement per line
 
@@ -81,7 +81,7 @@ Builds the toolchain for a specific architecture
 
 ## travis.sh [I]
 
-This is wrapper script for testing build of HelenOS under (Travis CI)[https://travis-ci.org/HelenOS/helenos/]
+This is wrapper script for testing build of HelenOS under [Travis CI](https://travis-ci.org/HelenOS/helenos/)
 
 ## xstruct.py [A]
 
