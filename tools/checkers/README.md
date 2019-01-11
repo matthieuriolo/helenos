@@ -1,5 +1,5 @@
-Basic instructions
-------------------
+# Basic instructions
+
 This is a very brief and preliminary description of the usage of source
 code checkers and verifiers located in this directory. It is not intended
 to be perfect since the formal verification is still work-in-progress, but
@@ -11,7 +11,7 @@ If you want to try, say, the Clang static analyzer, follow the steps:
 
 2. Run
 
-      make precheck
+      ```make precheck```
 
    Configure the kernel according to your preferences. Remember that many
    checkers have specific limitation on the target platform. They might
@@ -25,4 +25,4 @@ If you want to try, say, the Clang static analyzer, follow the steps:
    not forget the argument "." which indicates the path to the source tree
    root directory.
 
-      ./tools/checkers/clang.py .
+      ```./tools/checkers/clang.py .```
