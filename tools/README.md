@@ -71,7 +71,7 @@ FAT creator
 
 Create legacy uImage (U-Boot image)
 
-## srepl [I]
+## srepl.sh [I]
 
 String replacement per line
 
