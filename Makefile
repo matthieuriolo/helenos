@@ -161,6 +161,7 @@ ccheck-build:
 space:
 	tools/srepl.sh '[ \t]\+$$' ''
 
+.PHONY: doxy
 doxy:
 	$(MAKE) -r -C doxygen
 
