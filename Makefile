@@ -100,7 +100,7 @@ help:
 	@echo "    Exports the posix library and headers to uspace/export"
 
 .PHONY: common
-common: $(COMMON_MAKEFILE) $(COMMON_HEADER) $(CONFIG_MAKEFILE) $(CONFIG_HEADER) $(ERRNO_HEADER)
+common: toolchain-sanity $(COMMON_MAKEFILE) $(COMMON_HEADER) $(CONFIG_MAKEFILE) $(CONFIG_HEADER) $(ERRNO_HEADER)
 
 .PHONY: kernel
 kernel: common
@@ -128,6 +128,7 @@ export-cross: common
 
 .PHONY: precheck
 precheck: clean
+	./tools/toolchain-sanity.sh all
 	$(MAKE) -r all PRECHECK=y
 
 .PHONY: cscope
@@ -232,5 +233,15 @@ $(ERRNO_HEADER): $(ERRNO_INPUT)
 	echo '/* Generated file. Edit errno.in instead. */' > $@.new
 	sed 's/__errno_entry(\([^,]*\),\([^,]*\),.*/#define \1 __errno_t(\2)/' < $< >> $@.new
 	mv $@.new $@
+
+
+.PHONY: toolchain-build
+toolchain-build:
+	cd tools && ./toolchain.sh $(PROFILE)
+
+
+.PHONY: toolchain-sanity
+toolchain-sanity:
+	./tools/toolchain-sanity.sh $(PROFILE)
 
 -include Makefile.local
